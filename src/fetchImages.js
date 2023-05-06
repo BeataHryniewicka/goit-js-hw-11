@@ -1,5 +1,35 @@
 import Notiflix from 'notiflix';
 import axios from 'axios';
+const API_URL = 'https://pixabay.com/api/';
+const API_KEY = '28143013-44919de38ad9e5402793063fb';
+
+// function createApiObjects() {
+//   new apiObject({
+//     key: API_KEY,
+//     q: keyWord,
+//     image_type: photo,
+//     orientation: horizontal,
+//     safesearch: true,
+//     page: currentPage,
+//     per_page: defaultPerPage,
+//   });
+// }
+// createApiObjects();
+
+//1. pobrac fetcha z pixabay - zwróci tablicę
+//2.
+
+// export async function fetchImages() {
+//   try {
+//     const response = await axios.get(
+//       '${API_URL}?API_KEY=${API_KEY}&q=${keyWord}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}'
+//       //  'API_URL + ? + createApiObjects()'
+//     );
+//     console.log(response);
+//   } catch (error) {
+//     console.error('Error:' + error);
+//   }
+// }
 
 // export async function fetchImages() {
 //   // pobiera dane z serwera w formacie JSON za pomocą metody fetch()
