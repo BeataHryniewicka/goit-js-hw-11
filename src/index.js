@@ -9,40 +9,13 @@ const keyWord = inputEl.value;
 
 const btnSearch = document.querySelector('.search-btn');
 const btnLoadMore = document.querySelector('.load-more');
+const galeryListEl = document.querySelector('.galleryList');
 
 const API_URL = `https://pixabay.com/api/`;
-const API_KEY = `28143013-44919de38ad9e5402793063fb`;
+const API_KEY = `36096089-8019a6978013fb7a12ca287ee`;
 
 const defaultImgPerPage = 40;
 const page = 1;
-
-// function createApiObjects() {
-//   new apiObject({
-//     key: API_KEY,
-//     q: keyWord,
-//     image_type: photo,
-//     orientation: horizontal,
-//     safesearch: true,
-//     page: page,
-//     per_page: defaultImgPerPage,
-//   });
-// }
-
-//function createImg () {}
-// async function fetchImages() {
-//   try {
-//     const response = await axios.get(
-//       `${API_URL}?key=${API_KEY}&q=${keyWord}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${defaultPerPage}`
-//       // 'API_URL + ? + createApiObjects()'
-//     );
-//     // const data = await response.json();
-//     // console.log(data);
-//     // return data;
-//     console.log(response);
-//   } catch (error) {
-//     console.error('Error:' + error);
-//   }
-// }
 
 async function fetchImages() {
   try {
@@ -60,8 +33,42 @@ async function fetchImages() {
     console.error('Error:' + error);
   }
 }
+btnSearch.addEventListener('click', fetchImages());
 
-btnSearch.addEventListener('click', fetchImages);
+function createImg(image) {
+  galeryListEl.innerHTML = `<div class="photo-card">
+        <a href="${image.largeImageURL}">
+          <img src="${image.webformatURL}" alt="${image.tags}">
+        </a>
+        <div class="info">
+          <p class="info-item"><b>Likes:</b> ${image.likes}</p>
+          <p class="info-item"><b>Views:</b> ${image.views}</p>
+          <p class="info-item"><b>Comments:</b> ${image.comments}</p>
+          <p class="info-item"><b>Downloads:</b> ${image.downloads}</p>
+        </div>
+      </div>`;
+}
+
+btnLoadMore.addEventListener('click', createImg);
+
+// function createApiObjects() {
+//   new apiObject({
+//     key: API_KEY,
+//     q: keyWord,
+//     image_type: photo,
+//     orientation: horizontal,
+//     safesearch: true,
+//     page: page,
+//     per_page: defaultImgPerPage,
+//   });
+// }
+
+//function createImg() {}
+// async const createGallery = ()=> {
+//   await fetchImages();
+//   .then()
+//   .catch()
+// }
 
 // const imagesArray = fetchImages(keyWord);
 // console.log(Array.isArray(imagesArray));
