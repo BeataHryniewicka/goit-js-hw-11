@@ -2,14 +2,10 @@ import axios from 'axios';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
-//import { fetchImages } from './fetchImages.js';
-//import debounce from 'lodash.debounce';
 var debounce = require('lodash.debounce');
 
 const inputEl = document.querySelector('input[name="searchQuery"]');
 const keyWord = inputEl.value;
-
 const btnSearch = document.querySelector('.search-btn');
 const btnLoadMore = document.querySelector('.load-more');
 const galeryListEl = document.querySelector('.galleryList');
@@ -19,7 +15,6 @@ const API_KEY = `36096089-8019a6978013fb7a12ca287ee`;
 
 const defaultImgPerPage = 40;
 const page = 1;
-
 async function fetchImages() {
   try {
     const response = await axios.get(
@@ -30,9 +25,11 @@ async function fetchImages() {
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
+
     console.log(response.data.hits);
-    console.log(response.data.total);
-    const totalHits = response.data.total;
+    console.log(response.data.totalHits);
+    console.log(keyWord);
+    const totalHits = response.data.totalHits;
     if (totalHits > 0)
       Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
     return response.data.hits;
@@ -40,7 +37,7 @@ async function fetchImages() {
     console.error('Error:' + error);
   }
 }
-btnSearch.addEventListener('click', fetchImages);
+//btnSearch.addEventListener('click', fetchImages);
 
 async function createImg() {
   //tablica obiektów
@@ -65,34 +62,8 @@ async function createImg() {
     .join(' ');
 
   galeryListEl.innerHTML += imagesHTML;
-  let lightbox = new SimpleLightbox('.gallery a');
+  new SimpleLightbox('.gallery a');
 }
-
-// async function createGallery() {
-//   createImg()
-//     .then(images => {
-//       const totalHits = images.data.total;
-//       if
-//     })
-// }
-
-// if (newImages.length <= 2) {
-//   btnLoadMore.style.display = 'none';
-// }
-btnLoadMore.addEventListener('click', createImg);
-
-// function createApiObjects() {
-//   new apiObject({
-//     key: API_KEY,
-//     q: keyWord,
-//     image_type: photo,
-//     orientation: horizontal,
-//     safesearch: true,
-//     page: page,
-//     per_page: defaultImgPerPage,
-//   });
-// }
-
 function writeKeyWord() {
   // e.preventDefault();
   const keyWord = inputEl.value;
@@ -108,3 +79,17 @@ inputEl.addEventListener(
     1500
   )
 );
+
+//btnLoadMore.addEventListener('click', createImg);
+
+// function createApiObjects() {
+//   new apiObject({
+//     key: API_KEY,
+//     q: keyWord,
+//     image_type: photo,
+//     orientation: horizontal,
+//     safesearch: true,
+//     page: page,
+//     per_page: defaultImgPerPage,
+//   });
+// }
