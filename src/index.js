@@ -35,8 +35,12 @@ async function fetchImages() {
 }
 btnSearch.addEventListener('click', fetchImages());
 
-function createImg(image) {
-  galeryListEl.innerHTML = `<div class="photo-card">
+async function createImg(images) {
+  const newImages = await fetchImages();
+  return newImages
+    .map(
+      image =>
+        (galeryListEl.innerHTML = `<div class="photo-card">
         <a href="${image.largeImageURL}">
           <img src="${image.webformatURL}" alt="${image.tags}">
         </a>
@@ -46,10 +50,12 @@ function createImg(image) {
           <p class="info-item"><b>Comments:</b> ${image.comments}</p>
           <p class="info-item"><b>Downloads:</b> ${image.downloads}</p>
         </div>
-      </div>`;
+      </div>`)
+    )
+    .join(' ');
+  // galeryListEl.insertAdjacentHTML('beforeend', newImages);
 }
-
-btnLoadMore.addEventListener('click', createImg);
+btnLoadMore.addEventListener('click', createImg(fetchImages));
 
 // function createApiObjects() {
 //   new apiObject({
