@@ -35,12 +35,15 @@ async function fetchImages() {
 }
 btnSearch.addEventListener('click', fetchImages());
 
-async function createImg(images) {
+async function createImg() {
+  //tablica obiektów
   const newImages = await fetchImages();
-  return newImages
+  //tablica ciągów html
+  const imagesHTML = newImages
+    //używamy metody map() na tablicy newImages, aby utworzyć nową tablicę imagesHTML, która składa się z ciągów HTML reprezentujących każdy obrazek.
     .map(
       image =>
-        (galeryListEl.innerHTML = `<div class="photo-card">
+        `<div class="photo-card">
         <a href="${image.largeImageURL}">
           <img src="${image.webformatURL}" alt="${image.tags}">
         </a>
@@ -50,12 +53,17 @@ async function createImg(images) {
           <p class="info-item"><b>Comments:</b> ${image.comments}</p>
           <p class="info-item"><b>Downloads:</b> ${image.downloads}</p>
         </div>
-      </div>`)
+      </div>`
     )
     .join(' ');
-  // galeryListEl.insertAdjacentHTML('beforeend', newImages);
+
+  // if (newImages.length <= 40) {
+  //   btnLoadMore.style.display = 'none';
+  // }
+  galeryListEl.innerHTML += imagesHTML;
 }
-btnLoadMore.addEventListener('click', createImg(fetchImages));
+
+btnLoadMore.addEventListener('click', createImg);
 
 // function createApiObjects() {
 //   new apiObject({
@@ -68,26 +76,6 @@ btnLoadMore.addEventListener('click', createImg(fetchImages));
 //     per_page: defaultImgPerPage,
 //   });
 // }
-
-//function createImg() {}
-// async const createGallery = ()=> {
-//   await fetchImages();
-//   .then()
-//   .catch()
-// }
-
-// const imagesArray = fetchImages(keyWord);
-// console.log(Array.isArray(imagesArray));
-
-//forEach(image of ImagesArray)
-//funkcja do utworzenia nowego zdjęcia :
-// webformatURL - link do małego obrazka.
-// largeImageURL - link do dużego obrazka.
-// tags - wiersz z opisem obrazka. Będzie pasować do atrybutu alt.
-// likes - liczba “lajków”.
-// views - liczba wyświetleń.
-// comments - liczba komentarzy.
-// downloads - liczba pobrań.
 
 // function writeKeyWord() {
 //   // e.preventDefault();
