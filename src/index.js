@@ -1,8 +1,11 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 //import { fetchImages } from './fetchImages.js';
 //import debounce from 'lodash.debounce';
-//var debounce = require('lodash.debounce');
+var debounce = require('lodash.debounce');
 
 const inputEl = document.querySelector('input[name="searchQuery"]');
 const keyWord = inputEl.value;
@@ -28,12 +31,16 @@ async function fetchImages() {
       );
     }
     console.log(response.data.hits);
+    console.log(response.data.total);
+    const totalHits = response.data.total;
+    if (totalHits > 0)
+      Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
     return response.data.hits;
   } catch (error) {
     console.error('Error:' + error);
   }
 }
-btnSearch.addEventListener('click', fetchImages());
+btnSearch.addEventListener('click', fetchImages);
 
 async function createImg() {
   //tablica obiektów
@@ -57,12 +64,21 @@ async function createImg() {
     )
     .join(' ');
 
-  // if (newImages.length <= 40) {
-  //   btnLoadMore.style.display = 'none';
-  // }
   galeryListEl.innerHTML += imagesHTML;
+  let lightbox = new SimpleLightbox('.gallery a');
 }
 
+// async function createGallery() {
+//   createImg()
+//     .then(images => {
+//       const totalHits = images.data.total;
+//       if
+//     })
+// }
+
+// if (newImages.length <= 2) {
+//   btnLoadMore.style.display = 'none';
+// }
 btnLoadMore.addEventListener('click', createImg);
 
 // function createApiObjects() {
@@ -77,14 +93,18 @@ btnLoadMore.addEventListener('click', createImg);
 //   });
 // }
 
-// function writeKeyWord() {
-//   // e.preventDefault();
-//   // const keyWord = inputEl.value;
-//   console.log(keyWord);
-// }
-//inputEl.addEventListener('input', debounce(writeKeyWord, 1500));
+function writeKeyWord() {
+  // e.preventDefault();
+  const keyWord = inputEl.value;
+  console.log(keyWord);
+  createImg();
+}
 
-// btnSearch.addEventListener('click', () => {
-//   writeKeyWord();
-//   inputEl.value = ' ';
-// });
+inputEl.addEventListener(
+  'input',
+  debounce(
+    //musi sie wydarzyc zdarzenie, które działa po kliknieciu w button search
+    writeKeyWord,
+    1500
+  )
+);
