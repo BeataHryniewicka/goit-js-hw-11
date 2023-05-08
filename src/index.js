@@ -12,46 +12,41 @@ const galleryEl = document.querySelector('.gallery');
 const API_URL = `https://pixabay.com/api/`;
 const API_KEY = `36096089-8019a6978013fb7a12ca287ee`;
 
-const defaultImgPerPage = 3;
+const defaultImgPerPage = 40;
 const page = 1;
 
 async function fetchImages() {
   try {
-    let keyWord = inputEl.value;
+    const keyWord = inputEl.value;
     const response = await axios.get(
       `${API_URL}?key=${API_KEY}&q=${keyWord}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${defaultImgPerPage}`
     );
-    if (response.data.hits.lenght === 0) {
+    if (response.data.hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
-    console.log(response.data.hits);
-    console.log(response.data.totalHits);
-    console.log(keyWord);
-
-    const totalHits = response.data.totalHits;
-    if (totalHits > 0)
-      Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
-    return response.data.hits;
+    console.log(response.data);
+    //console.log(response.data.totalHits);
+    // console.log(keyWord);
+    return response.data;
   } catch (error) {
     console.error('Error:' + error);
   }
 }
 
 async function createImages() {
-  //tablica obiektów
-  const newImages = await fetchImages();
   btnLoadMore.style.display = 'block';
-
+  const newImages = await fetchImages();
   //tablica ciągów html
-  const imagesHTML = newImages
-    //używamy metody map() na tablicy newImages, aby utworzyć nową tablicę imagesHTML, która składa się z ciągów HTML reprezentujących każdy obrazek.
+  const imagesHTML = newImages.hits
+    //console.log(imagesHTML);
+    // używamy metody map() na tablicy newImages, aby utworzyć nową tablicę imagesHTML, która składa się z ciągów HTML reprezentujących każdy obrazek.
     .map(
       image =>
         `<div class="photo-card">
         <a href="${image.largeImageURL}">
-          <img src="${image.webformatURL}" alt="${image.tags}">
+          <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy">
         </a>
         <div class="info">
           <p class="info-item"><b>Likes:</b> ${image.likes}</p>
@@ -67,24 +62,24 @@ async function createImages() {
   new SimpleLightbox('.gallery a');
 }
 
-btnSearch.addEventListener('click', createImages);
-
-function loadMore() {
-  console.log("We're sorry, but you've reached the end of search results.");
-  // page++;
-  btnLoadMore.display.style = 'none';
-  Notiflix.Notify.info(
-    "We're sorry, but you've reached the end of search results."
-  );
+async function createPage() {
+  const newImages = await fetchImages();
+  Notiflix.Notify.success(`Hooray! We found ${newImages.totalHits} images.`);
+  createImages();
 }
-btnLoadMore.addEventListener('click', loadMore);
+btnSearch.addEventListener('click', createPage);
 
-//do zrobienia:
-//paginacja
-//buttony chowanie
-//załadowanie kolejnej strony
-//We're sorry, but you've reached the end of search results."
-//simplelightbox - nie działa
+function showNextPage() {
+  createImages();
+  page++;
+  if (page > newImages.totalHits / defaultImgPerPage) {
+    btnLoadMore.style.display = 'none';
+    Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+  }
+}
+btnLoadMore.addEventListener('click', showNextPage);
 
 // function createApiObjects() {
 //   new apiObject({

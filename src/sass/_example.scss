@@ -1,15 +1,72 @@
-.search-form {
-  margin-top: 5em;
-  margin-left: 15em;
+body,
+html {
+  height: 100%;
+  margin: 0;
+  background-color: rgb(245, 241, 241);
 }
 
-.show-next {
-  margin-top: 5em;
-  margin-left: 20em;
+input {
+  border-radius: 5px;
 }
+
+img {
+  width: 100%;
+  height: 80%;
+  display: block;
+  object-fit: cover;
+}
+
+.search-form {
+  margin-top: 3em;
+  margin-bottom: 3em;
+  margin-left: 40vw;
+}
+
+// .show-next {
+//   margin-top: 5em;
+//   margin-left: 20em;
+// }
+
 .load-more {
-  margin-left: 20em;
+  margin-bottom: 5em;
+  margin-left: 45vw;
   display: none;
+  background-color: gray;
+  border-radius: 5px;
+  color: white;
+}
+
+.search-btn {
+  background-color: gray;
+  border-radius: 5px;
+  color: white;
+}
+
+.gallery {
+  padding: 2em;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 10px;
+  width: 100vw;
+  margin-bottom: 2em;
+}
+
+.photo-card {
+  position: relative;
+}
+
+.info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.info-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-around;
+  font-size: small;
 }
 
 // .example {
