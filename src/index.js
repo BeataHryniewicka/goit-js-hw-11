@@ -2,7 +2,7 @@ import axios from 'axios';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-//var debounce = require('lodash.debounce');
+
 const formEl = document.querySelector('.search-form');
 const inputEl = document.querySelector('input[name="searchQuery"]');
 const btnSearch = document.querySelector('.search-btn');
@@ -12,7 +12,7 @@ const galleryEl = document.querySelector('.gallery');
 const API_URL = `https://pixabay.com/api/`;
 const API_KEY = `36096089-8019a6978013fb7a12ca287ee`;
 
-let defaultImgPerPage = 4;
+let defaultImgPerPage = 40;
 let page = 1;
 
 //funkcja do pobrania danych z API
@@ -51,7 +51,6 @@ async function createImages() {
       </div>`
     )
     .join(' ');
-
   galleryEl.innerHTML += imagesHTML;
   new SimpleLightbox('.gallery a');
 }
@@ -84,7 +83,6 @@ async function showNextPage() {
   const { height: cardHeight } = document
     .querySelector('.gallery')
     .firstElementChild.getBoundingClientRect();
-
   window.scrollBy({
     top: cardHeight * 2,
     behavior: 'smooth',
