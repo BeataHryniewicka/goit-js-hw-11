@@ -11,37 +11,34 @@ const galleryEl = document.querySelector('.gallery');
 
 const API_URL = `https://pixabay.com/api/`;
 const API_KEY = `36096089-8019a6978013fb7a12ca287ee`;
+const defaultImgPerPage = 4;
+let page = 1;
 
-const defaultImgPerPage = 40;
-const page = 1;
-
+//funkcja do pobrania danych z API
 async function fetchImages() {
   try {
-    const keyWord = inputEl.value;
+    const keyWord = inputEl.value.trim();
     const response = await axios.get(
       `${API_URL}?key=${API_KEY}&q=${keyWord}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${defaultImgPerPage}`
     );
-    if (response.data.hits.length === 0) {
-      Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-    }
-    console.log(response.data);
-    //console.log(response.data.totalHits);
-    // console.log(keyWord);
+    //console.log(response.data);
     return response.data;
   } catch (error) {
     console.error('Error:' + error);
   }
 }
 
+//funkcja do utworzenia nowej tablicy zdjęć na rezultacie z fetchImages, konwersja z tablicy obiektów na tablicę ciągów html, wepchniecie do html zdjęć z parametrami, podpięcie sie pod galerię SimpleLihtbox z paginacją
 async function createImages() {
   btnLoadMore.style.display = 'block';
+  //tablica obiektów
   const newImages = await fetchImages();
+  if (newImages.totalHits <= defaultImgPerPage) {
+    btnLoadMore.style.display = 'none';
+  }
   //tablica ciągów html
   const imagesHTML = newImages.hits
     //console.log(imagesHTML);
-    // używamy metody map() na tablicy newImages, aby utworzyć nową tablicę imagesHTML, która składa się z ciągów HTML reprezentujących każdy obrazek.
     .map(
       image =>
         `<div class="photo-card">
@@ -60,26 +57,60 @@ async function createImages() {
 
   galleryEl.innerHTML += imagesHTML;
   new SimpleLightbox('.gallery a');
-}
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
 
-async function createPage() {
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
+//funkcja createImages z powiadomieniami w zalezności od ilości zwrtów, potrzebna tylko do pierwszorazowym kliku na Show
+async function createImagesNotification() {
   const newImages = await fetchImages();
-  Notiflix.Notify.success(`Hooray! We found ${newImages.totalHits} images.`);
+  // if ((inputEl.value === ' ')) {
+  //   alert('Please enter any word');
+  // }
+  if (newImages.totalHits === 0) {
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+  } else {
+    Notiflix.Notify.success(`Hooray! We found ${newImages.totalHits} images.`);
+  }
   createImages();
 }
-btnSearch.addEventListener('click', createPage);
+btnSearch.addEventListener('click', createImagesNotification);
 
-function showNextPage() {
-  createImages();
+//funkcja ładowania kolejnych stron
+async function showNextPage() {
+  btnLoadMore.style.display = 'none';
   page++;
-  if (page > newImages.totalHits / defaultImgPerPage) {
-    btnLoadMore.style.display = 'none';
+  const newImages = await fetchImages();
+  if (page > newImages.totalHits / defaultImgPerPage + 1) {
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
     );
   }
+  const nextPage = createImages();
+  nextPage.refresh();
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
-btnLoadMore.addEventListener('click', showNextPage);
+
+btnLoadMore.addEventListener('click', e => {
+  e.preventDefault();
+  btnLoadMore.style.display = 'none';
+  showNextPage();
+  btnLoadMore.style.display = 'block';
+});
 
 // function createApiObjects() {
 //   new apiObject({
