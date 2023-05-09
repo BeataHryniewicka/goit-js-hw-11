@@ -11,7 +11,7 @@ const galleryEl = document.querySelector('.gallery');
 
 const API_URL = `https://pixabay.com/api/`;
 const API_KEY = `36096089-8019a6978013fb7a12ca287ee`;
-const defaultImgPerPage = 4;
+const defaultImgPerPage = 16;
 let page = 1;
 
 //funkcja do pobrania danych z API
@@ -67,7 +67,8 @@ async function createImages() {
     behavior: 'smooth',
   });
 }
-//funkcja createImages z powiadomieniami w zalezności od ilości zwrtów, potrzebna tylko do pierwszorazowym kliku na Show
+
+//funkcja createImages z powiadomieniami w zalezności od ilości zwrotów, potrzebna tylko w pierwszorazowym kliku na Show
 async function createImagesNotification() {
   const newImages = await fetchImages();
   // if ((inputEl.value === ' ')) {
