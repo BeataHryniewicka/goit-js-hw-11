@@ -57,6 +57,7 @@ async function createImages() {
 
   galleryEl.innerHTML += imagesHTML;
   new SimpleLightbox('.gallery a');
+
   const { height: cardHeight } = document
     .querySelector('.gallery')
     .firstElementChild.getBoundingClientRect();
