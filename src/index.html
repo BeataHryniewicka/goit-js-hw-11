@@ -10,7 +10,20 @@
   <br />
   <br />
   <body>
-    <!-- ❗️❗️❗️ Add partials like so for every page -->
-    <include src="./partials/example.html"></include>
+    <form class="search-form" id="search-form">
+      <input
+        type="text"
+        name="searchQuery"
+        autocomplete="off"
+        placeholder="Search images..."
+        autocomplete="off"
+        required
+      />
+      <button type="button" class="search-btn">Search</button>
+    </form>
+    <div class="gallery"></div>
+    <div><button type="button" class="load-more">Load more</button></div>
+    <br />
+    <br />
   </body>
 </html>
