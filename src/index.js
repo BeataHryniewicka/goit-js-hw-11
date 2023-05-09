@@ -95,6 +95,7 @@ async function showNextPage() {
   }
   const nextPage = createImages();
   nextPage.refresh();
+
   const { height: cardHeight } = document
     .querySelector('.gallery')
     .firstElementChild.getBoundingClientRect();
