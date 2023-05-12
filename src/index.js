@@ -8,7 +8,6 @@ const inputEl = document.querySelector('input[name="searchQuery"]');
 const btnSearch = document.querySelector('.search-btn');
 const btnLoadMore = document.querySelector('.load-more');
 const galleryEl = document.querySelector('.gallery');
-
 const API_URL = `https://pixabay.com/api/`;
 const API_KEY = `36096089-8019a6978013fb7a12ca287ee`;
 
@@ -56,7 +55,8 @@ async function createImages() {
 }
 
 //funkcja createImages z powiadomieniami w zalezności od ilości zwrotów, potrzebna tylko w pierwszorazowym kliku na Show
-async function createImagesNotification() {
+async function createImagesNotification(e) {
+  e.preventDefault();
   btnLoadMore.style.display = 'block';
   const newImages = await fetchImages();
   if (newImages.totalHits === 0) {
@@ -69,7 +69,7 @@ async function createImagesNotification() {
   }
   galleryEl.innerHTML = '';
 }
-btnSearch.addEventListener('click', createImagesNotification);
+formEl.addEventListener('submit', createImagesNotification);
 
 //funkcja ładowania kolejnych stron
 async function showNextPage() {
@@ -80,13 +80,6 @@ async function showNextPage() {
       "We're sorry, but you've reached the end of search results."
     );
   }
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
   createImages();
 }
 
